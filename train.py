@@ -8,7 +8,7 @@ from util import Visualizer
 
 def get_parser():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--data_root', default=r'E:\Database\RUIJIN_data\03_DATASET\mask_dataset', type=str, help='path/to/data')
+    parser.add_argument('--data_root', default=r'/home/david/code/project/veus-breast-cancer/VEUS/tools', type=str, help='path/to/data')
     parser.add_argument('--EnhanceT', default=True, help='')
 
     # training related

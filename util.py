@@ -68,7 +68,7 @@ class Visualizer:
         self.display_id = 1
         self.win_size = 256
         self.name = opt.name
-        self.port = 8097
+        self.port = 18097
         self.saved = False
         self.web_dir = os.path.join(opt.checkpoints_dir, opt.name, 'web')
         self.img_dir = os.path.join(self.web_dir, 'images')
@@ -76,7 +76,7 @@ class Visualizer:
         if self.display_id > 0:  # connect to a visdom server given <display_port> and <display_server>
             import visdom
             self.ncols = 4
-            self.vis = visdom.Visdom(server='http://localhost', port=8097, env='main')
+            self.vis = visdom.Visdom(server='http://localhost', port=18097, env='main')
             if not self.vis.check_connection():
                 self.create_visdom_connections()
 

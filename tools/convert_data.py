@@ -5,7 +5,7 @@ from collections import defaultdict
 
 # 设置文件夹路径
 folder_path = 'new_dataset'  # 替换为你的图片文件夹路径
-output_folder = 'output'           # 拼接后的图片保存路径
+output_folder = 'train'     # 拼接后的图片保存路径
 
 # 创建输出文件夹
 os.makedirs(output_folder, exist_ok=True)
@@ -38,18 +38,35 @@ for patient_id, files in images_dict.items():
 
     # 准备拼接图像
     images = []
-    size = (286, 286)
-    for _, filename in files:
+    size = (256, 256)
+
+    # 定义每张图的转换模式
+    convert_modes = {
+        1: 'L',      # 第1张：灰度
+        2: 'RGB',    # 第2张：彩色
+        3: 'L'       # 第3张：灰度
+    }
+
+    success = True
+    for img_num, filename in files:
         filepath = os.path.join(folder_path, filename)
+        # print(f"正在处理: {filepath}")
         try:
-            img = Image.open(filepath)
-            img = img.resize(size, Image.Resampling.LANCZOS)  # 高质量 resize
+            img = Image.open(filepath).convert(convert_modes[img_num])  # 按要求转换
+            img = img.resize(size, Image.Resampling.LANCZOS)
+
+            # 如果是 'L' 模式（灰度），转换为 RGB 以便拼接（避免粘贴时模式不匹配）
+            if img.mode == 'L':
+                img = img.convert('RGB')
+
             images.append(img)
         except Exception as e:
             print(f"无法打开或处理 {filename}: {e}")
+            success = False
             break
-    else:  # 成功加载三张图
-        # 创建拼接图像 (286*3 = 858 宽，286 高)
+
+    if success and len(images) == 3:
+        # 创建拼接图像 (768 x 256)
         combined = Image.new('RGB', (size[0] * 3, size[1]))
 
         # 从左到右粘贴
